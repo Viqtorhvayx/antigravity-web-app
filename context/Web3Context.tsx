@@ -1,8 +1,20 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { HashConnect, HashConnectTypes, MessageTypes } from 'hashconnect';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { HashConnect, HashConnectTypes } from 'hashconnect';
+import { WagmiProvider, createConfig, http, useAccount, useConnect, useDisconnect } from 'wagmi';
+import { mainnet, sepolia } from 'wagmi/chains';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+
+const config = createConfig({
+  chains: [mainnet, sepolia],
+  transports: {
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+  },
+});
 
 interface Web3ContextType {
   address: string | undefined;
@@ -16,13 +28,13 @@ interface Web3ContextType {
 const Web3Context = createContext<Web3ContextType | undefined>(undefined);
 
 const appMetadata: HashConnectTypes.AppMetadata = {
-  name: "Hedera DeFi DApp",
-  description: "Saving, Lending, and Borrowing on Hedera",
+  name: "CREDO Hedera DeFi",
+  description: "Stability through Reputation. Developed by Viqtorhvayx.",
   icons: ["https://www.hashpack.app/img/logo.svg"],
   url: typeof window !== 'undefined' ? window.location.origin : '',
 };
 
-export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Web3ProviderInner: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [walletType, setWalletType] = useState<'metamask' | 'hashpack' | null>(null);
   const [hashConnect, setHashConnect] = useState<HashConnect | null>(null);
   const [hpData, setHpData] = useState<any>(null);
@@ -34,21 +46,25 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const initHashConnect = async () => {
-      const hc = new HashConnect(true);
-      await hc.init(appMetadata, "testnet", false);
-      setHashConnect(hc);
+      try {
+        const hc = new HashConnect(true);
+        await hc.init(appMetadata, "testnet", false);
+        setHashConnect(hc);
 
-      hc.pairingEvent.on((data) => {
-        setHpData(data);
-        setWalletType('hashpack');
-      });
+        hc.pairingEvent.on((data) => {
+          setHpData(data);
+          setWalletType('hashpack');
+        });
+      } catch (e) {
+        console.error("HashConnect init error", e);
+      }
     };
 
     initHashConnect();
   }, []);
 
   const connectMetaMask = () => {
-    const connector = connectors.find(c => c.name === 'MetaMask');
+    const connector = connectors.find(c => c.name === 'MetaMask' || c.name === 'Injected');
     if (connector) {
       connectMM({ connector });
       setWalletType('metamask');
@@ -81,10 +97,20 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
+export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <Web3ProviderInner>{children}</Web3ProviderInner>
+      </QueryClientProvider>
+    </WagmiProvider>
+  );
+};
+
 export const useWeb3 = () => {
   const context = useContext(Web3Context);
   if (context === undefined) {
-    throw new Error('useWeb3 must be used within a Web3Provider');
+    throw new Error('useWeb3 must be used within a Web3ProviderInner');
   }
   return context;
 };

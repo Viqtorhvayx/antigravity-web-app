@@ -18,7 +18,7 @@ const LockingModule = () => {
       <div className="space-y-6">
         <div>
           <label className="text-[10px] text-[#555] block mb-2">SELECT_ASSET</label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {['HBAR', 'USDT', 'USDC'].map((a) => (
               <button
                 key={a}
