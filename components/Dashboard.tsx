@@ -15,8 +15,8 @@ const Dashboard = () => {
     <div className="min-h-screen bg-[#0a0a0a] text-[#d1d1d1] p-8 font-mono">
       <header className="flex justify-between items-center mb-12 border-b border-[#1a1a1a] pb-6">
         <div>
-          <h1 className="text-4xl font-black tracking-[0.2em] text-white font-outfit uppercase">CREDO</h1>
-          <p className="text-[10px] text-[#4d9a9a] mt-1 tracking-widest opacity-80">STABILITY_THROUGH_REPUTATION</p>
+          <h1 className="text-lg font-light tracking-[0.3em] text-[#d1d1d1] font-outfit uppercase">CREDO</h1>
+          <p className="text-[10px] text-[#4d9a9a] mt-1 tracking-widest opacity-60">STABILITY_THROUGH_REPUTATION</p>
         </div>
         <div className="flex gap-4">
           {!isConnected ? (
