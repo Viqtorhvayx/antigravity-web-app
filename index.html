@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Antigravity App</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1 class="gradient-text">Antigravity</h1>
+        <p class="subtitle">Your automated deployment pipeline is live.</p>
+      </header>
+      
+      <main>
+        <div class="card glass">
+          <div class="icon-container">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h2>Seamless Deployments</h2>
+          <p>Every time you push to GitHub, this site will automatically build and deploy via Vercel.</p>
+          <button id="action-btn" class="primary-btn">Test Interaction</button>
+        </div>
+      </main>
+      
+      <div class="particles"></div>
+    </div>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
